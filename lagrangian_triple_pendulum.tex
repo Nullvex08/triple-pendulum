@@ -1,0 +1,220 @@
+\documentclass[11pt,a4paper, oneside,titlepage]{report}
+
+\usepackage[a4paper,
+            left=3cm,
+            right=2cm,
+            top=3cm,
+            bottom=3cm]{geometry}
+
+
+\setlength{\parindent}{0pt}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage[pdftex]{pict2e}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{physics}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{pgf, tikz}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{cd}
+	\usetikzlibrary{math}
+	\usetikzlibrary{plotmarks}
+	\usetikzlibrary{angles}
+	\usetikzlibrary{intersections}
+	\usetikzlibrary{calc}
+	\usetikzlibrary{quotes}
+	\usetikzlibrary{babel}
+	\usetikzlibrary{perspective}
+	\usetikzlibrary{arrows.meta}
+
+\usepackage{cleveref} 
+
+
+
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+\newcommand{\Reb}[1]{\textup{Re} \left( #1\right)}
+
+\newcommand{\Imb}[1]{\textup{Im} \left( #1\right)}
+\newcommand{\br}[1]{\mathopen{} \left( #1 \right)}
+\newcommand{\li}[1]{\textup{li} \br{#1}}
+\newcommand{\eckbr}[1]{\left[ #1 \right]}
+\newcommand{\curlybr}[1]{\left\{ #1 \right\}}
+\newcommand{\abso}[1]{\left| #1 \right|}
+\newcommand{\bepo}[2]{B_{#1} \br{#2}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\convo}[3]{\br{#1 \ast #2} \br{#3}}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\sgn}[1]{\text{sgn} \br{#1}}
+\newcommand{\kin}[2]{\frac{1}{2} m_{#1,#2}}
+\newcommand{\dert}{\frac{\dd}{\dd t}}
+
+
+
+
+\setlength{\skip\footins}{20pt}
+
+
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}  
+\fancyhead[L]{\leftmark}  % Chapter/section name left
+\fancyhead[R]{\rightmark}               % Empty right (oneside)
+\fancyfoot[C]{\thepage}      % Page center bottom
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+
+
+\begin{document}
+
+
+
+\chapter{Triple Pendulum}\label{chap:trip_pend}
+
+In this chapter, we derive the Lagrangian of the triple pendulum, as well as explain how one can find all equations of motion of a triple pendulum.
+
+\vspace{2em}
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}[scale=2]
+
+\coordinate (P1) at (0,0);
+\fill (P1) circle (0.05);
+\tikzmath{real \L, \anglef, \angles, \anglet;
+\L = 1.3;
+\anglef = 45;
+\angles = -96;
+\anglet = 36;
+\xff = -sin(\anglef)*\L;
+\yff = cos(\anglef)*\L;
+\xfs = sin(\anglef)*\L;
+\yfs = -cos(\anglef)*\L;
+\xsf = \xfs-sin(\angles)*\L;
+\ysf = \yfs+cos(\angles)*\L;
+\xss = \xfs+sin(\angles)*\L;
+\yss = \yfs-cos(\angles)*\L;
+\xtf = \xss-sin(\anglet)*\L;
+\ytf = \yss+cos(\anglet)*\L;
+\xts = \xss+sin(\anglet)*\L;
+\yts = \yss-cos(\anglet)*\L;
+}
+\coordinate (mfs) at (\xff,\yff);
+\coordinate (mff) at (\xfs,\yfs);
+\coordinate (mss) at (\xsf,\ysf);
+\coordinate (msf) at (\xss,\yss);
+\coordinate (mts) at (\xtf,\ytf);
+\coordinate (mtf) at (\xts,\yts);
+\fill (mfs) circle (0.09) node[above left]{$m_{1,2}$};
+\fill (mff) circle (0.05) node[below right]{$m_{1,1}$};
+\fill (msf) circle (0.045) node[left]{$m_{2,1}$};
+\fill (mss) circle (0.06) node[below right]{$m_{2,2}$};
+\fill (mtf) circle (0.05) node[below right]{$m_{3,1}$};
+\fill (mts) circle (0.04) node[left]{$m_{3,2}$};
+
+
+\draw (-2,0) node[above] {$y=0$}--(2,0);
+
+\draw[->](-4,-0.5)--(-4,0.5) node[left]{$y$};
+\draw[->](-4.5, 0)--(-3.5,0) node[above]{$x$};
+
+\draw (\xff,\yff)--(\xfs,\yfs) node[pos=0.3, right]{$l_{1,2}$} node[pos=0.7, right]{$l_{1,1}$};
+\draw (\xsf, \ysf)--(\xss,\yss)node[pos=0.2, above]{$l_{2,2}$} node[pos=0.8, below]{$l_{2,1}$};
+\draw (\xtf, \ytf)--(\xts,\yts)node[pos=0.25, left]{$l_{3,2}$} node[pos=0.85, left]{$l_{3,1}$};
+
+\draw[dashed] (P1)--(0,-\L/3);
+\draw[dashed] (\xfs,\yfs)--(\xfs,\yfs-\L/3);
+\draw[dashed] (\xss,\yss)--(\xss,\yss-\L/3);
+\draw (0,-\L/4) arc [start angle=-90, end angle=-90+\anglef, radius=\L/4] 
+      node[pos=0.8, below] {$\theta_1$};
+\draw (\xfs,\yfs-\L/4) arc [start angle=-90, end angle=-90+\angles, radius=\L/4] 
+      node[pos=0.65, below] {$\theta_2$};
+\draw (\xss,\yss-\L/4) arc [start angle=-90, end angle=-90+\anglet, radius=\L/4] 
+      node[pos=0.8, below] {$\theta_3$};
+
+
+\end{tikzpicture}
+\end{center}
+\caption{A triple pendulum with pivot points in the middle of the rod and masses on both ends}
+\label{fig:triple_pendulum}
+\end{figure}
+
+
+We first derive the Lagrangian of this system. It has 3 degrees of freedom. This can easily be seen, as we can express the whole system with the three angles $\theta_1, \theta_2$ and $\theta_3\,$. More formally, we have holonomic constraints on all the masses, since the distance from the mass to its pivot point always stays the same\footnote{for more details, see ~\cite{skript}}. We simplify the system a bit to make the equations a little bit shorter. We assume that $l_{n,m} = l_{n',m'}\,$, that is to say the rod is connected at the center to the pivot point and all lengths are the same. Furthermore, we assume the masses of the rod are all equal and homogeneously distributed. Recall the moment of inertia of a rotational object $E = \frac{1}{2} \cdot  J \cdot \omega^2\,$, with $J \coloneqq \int_K r^2\dd m \,$. For a homogeneous thin rod width, we use the formula $J_s \approx \frac{1}{12}ml^2\,$. Now, we first calculate the value of the kinetic energy $T$. Notice that taking track of the minus signs is crucial in this system. We introduce a function $s_{m}$ which is equal to $-1$ if the $m=2\,$, and $1$ otherwise.
+\begin{align*}
+T &= \sum_{n\leq 3}\sum_{m\leq 2} \kin{n}{m} \br{\dot{x}_{n,m}^2 + \dot{y}_{n,m}^2} + \sum_{n \leq 3} \frac{1}{2} \cdot  J_n \cdot \omega_n^2 + \sum_{n \leq 3} \frac{1}{2} m_{\textup{rod}} \br{\dot{x}_{{\textup{pivot}}, n}^2 + \dot{y}_{{\textup{pivot}}, n}^2}\\
+&= \sum_{n\leq 3}\sum_{m\leq 2}\kin{n}{m} \br{\br{\dert\br{ \sum_{i < n} \sin \br{\theta_i} \cdot l + s_m \sin\br{\theta_n} \cdot l}}^2 + \br{- \dert \br{ \sum_{i < n}\cos \br{\theta_i} \cdot l+s_m \cos\br{\theta_n} \cdot l}}^2} \\
+&{} \quad + \sum_{i\leq 2}\frac{1}{2} m_{\textup{rod}} \br{\dot{x}_{i,1}^2 + \dot{y}_{i,1}^2} +\sum_{n \leq 3}\frac{1}{2} \cdot  \frac{1}{12} m_{rod} \cdot l^2 \cdot \dot{\theta_n}^2
+\end{align*}
+
+We will now calculate the single terms and rearrange them:
+\begin{multline*}
+T = \frac{1}{2} \br{m_{1,1} + m_{1,2}+ m_{2,1} + m_{2,2} + m_{3,1} + m_{3,2}} \dot{\theta}_1^2 l^2 + \frac{1}{2} \br{m_{2,1} + m_{2,2} + m_{3,1} + m_{3,2}} \dot{\theta}_2^2 l^2 \\
++ \br{m_{2,1} + m_{3,1} + m_{3,2} - m_{2,2}} l^2 \dot{\theta}_1 \dot{\theta}_2 \cos \br{\theta_1 - \theta_2} + \frac{1}{2} \br{m_{3,1} + m_{3,2}} l^2\dot{\theta}_3^2 \\
++ \br{m_{3,1} - m_{3,2}} l^2\br{\dot{\theta}_1 \dot{\theta}_3 \cos \br{\theta_1 - \theta_3} + \dot{\theta}_2 \dot{\theta}_3 \cos \br{\theta_2 - \theta_3}} \\
++ \frac{1}{2} m_{\textup{rod}} \br{2\dot{\theta}_1^2l^2+\dot{\theta}_2^2l^2 + 2l^2\dot{\theta}_1\dot{\theta}_2 \cos \br{\theta_1-\theta_2}}+ \frac{1}{24}\br{\dot{\theta}_1^2 +  \dot{\theta}_2^2 + \dot{\theta}_3^2} \br{2l}^2 m_{\textup{rod}}
+\end{multline*}
+Now, for the Lagrangian, we just subtract the potential term $V$ and obtain:
+\begin{multline*}
+L = T - \big(gl \cos\br{\theta_1} \br{m_{1,2} - m_{1,1} - m_{2,1} - m_{2,2} - m_{3,1} - m_{3,2}} + gl \cos \br{\theta_2} \br{m_{2,2} - m_{2,1} - m_{3,1} - m_{3,2}} \\+ gl \br{\cos \br{\theta_3}} \br{m_{3,2} - m_{3,1}} - gm_{\textup{rod}} l \br{2\cos \br{\theta_1} + \cos \br{\theta_2}} \big) \quad .
+\end{multline*}
+Recall the Euler-Lagrange equation\footnote{for a rigorous derivation of the equation, see ~\cite{skript}}
+Plugging everything into the Euler-Lagrange equation and choosing $q_i = \theta_1$, we obtain the equation:
+\begin{align*}
+&\ddot{\theta}_1 \cdot l^2 \br{m_{1,1} + m_{1,2} +m_{2,1} +m_{2,2} +m_{3,1} +m_{3,2}+ \frac{7}{6}m_{\textup{rod}}} + \\
+&\ddot{\theta}_2 \cdot l^2 \cos \br{\theta_1-\theta_2} \br{m_{2,1} +m_{3,1} +m_{3,2} -m_{2,2} + m_{\textup{rod}}} +\\
+&\ddot{\theta}_3 \cdot l^2 \cos \br{\theta_1 - \theta_3} \br{m_{3,1} - m_{3,2}} = \\
+&\br{m_{2,1} + m_{3,1} + m_{3,2} - m_{2,2} +m_{\textup{rod}}} l^2 \dot{\theta}_2 \sin \br{\theta_1 - \theta_2} \br{\dot{\theta}_1 - \dot{\theta}_2} +\br{m_{3,1} - m_{3,2}} l^2 \dot{\theta}_3 \sin\br{\theta_1-\theta_3} \br{\dot{\theta}_1 - \dot{\theta}_3}  \\
+&- gl \sin \br{\theta_1}\br{m_{1,1} + m_{2,1} + m_{2,2} + m_{3,1} + m_{3,2} - m_{1,2}} - 2 g m_{\textup{rod}}\sin\br{\theta_1} l 
+- \br{m_{2,1} + m_{3,1} + m_{3,2} - m_{2,2}} \cdot\\ &l^2 \dot{\theta}_1 \dot{\theta}_2 \sin\br{\theta_1 - \theta_2}- \br{m_{3,1} - m_{3,2}} \dot{\theta}_1 \dot{\theta}_3 l^2 \sin\br{\theta_1 - \theta_3} - m_{\textup{rod}} l^2 \dot{\theta}_1 \dot{\theta}_2 \sin\br{\theta_1 - \theta_2}
+\end{align*}
+Doing this for all 3 variables $\theta_1, \theta_2$ and $\theta_3\,$, we get a linear system, which we can solve for $\ddot{\theta}_1, \ddot{\theta}_2$ and $\ddot{\theta}_3\,$.
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
+\end{document}
